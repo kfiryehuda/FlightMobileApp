@@ -18,6 +18,8 @@ namespace FlightMobileApp
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Connect connect = new Connect();
+            connect.ConnectToFG("127.0.0.1", 54002);
         }
 
         public IConfiguration Configuration { get; }

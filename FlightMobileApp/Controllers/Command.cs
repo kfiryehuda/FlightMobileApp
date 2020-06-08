@@ -21,7 +21,7 @@ namespace FlightMobileApp.Controllers
 
         [HttpPost]
         [Route("api/command")]
-        public async ActionResult<PlaneInfo> PostCommands(PlaneInfo info)
+        public async Task<ActionResult<PlaneInfo>> PostCommands(PlaneInfo info)
         {
 
             return info;
@@ -29,9 +29,11 @@ namespace FlightMobileApp.Controllers
 
         [HttpGet]
         [Route("screenshot")]
-        public ActionResult<> GetPicture()
+        public async Task<IActionResult> GetPicture()
         {
-
+            var image = System.IO.File.OpenRead("C:\\test\\random_image.jpeg");
+            return File(image, "image/jpeg");
         }
-        
+
+    }
 }
