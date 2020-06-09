@@ -17,19 +17,17 @@ namespace FlightMobileApp.Controllers
         public CommandController(IMemoryCache cache, ILogger<CommandController> logger)
         {
             _logger = logger;
-            connect = new Connect();
-            connect.ConnectToFG("127.0.0.1", 5402);
-            connect.WriteAndRead("data\n");
-            cache.Set("server", connect);
+            
         }
 
         [HttpPost]
         [Route("api/command")]
         public async Task<ActionResult<PlaneInfo>> PostCommands(PlaneInfo info)
         {
-            string aileron = connect.WriteAndRead(Convert.ToString("set /controls/flight/aileron " + info.aileron + " \n"));
-
-            Console.WriteLine(aileron);
+            connect = new Connect();
+            connect.ConnectToFG("127.0.0.1", 5402);
+            //connect.WriteAndRead("data\n");
+            string aileron = connect.WriteAndRead(Convert.ToString("set /controls/flight/aileron " + info.aileron + "\r\n"));
             return info;
         }
 
