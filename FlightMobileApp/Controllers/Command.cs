@@ -17,19 +17,20 @@ namespace FlightMobileApp.Controllers
         public CommandController(IMemoryCache cache, ILogger<CommandController> logger)
         {
             _logger = logger;
-            connect = new Connect();
-            connect.ConnectToFG("127.0.0.1", 5402);
-            connect.WriteAndRead("data\n");
-            cache.Set("server", connect);
+
         }
 
         [HttpPost]
         [Route("api/command")]
-        public async Task<ActionResult<PlaneInfo>> PostCommands(PlaneInfo info)
+        public ActionResult<PlaneInfo> PostCommands(PlaneInfo info)
         {
-            string aileron = connect.WriteAndRead(Convert.ToString("set /controls/flight/aileron " + info.aileron + " \n"));
+            connect = new Connect();
+            connect.ConnectToFG("127.0.0.1", 5402);
+            //connect.WriteAndRead("data\n");
 
-            Console.WriteLine(aileron);
+            string aileron = connect.WriteAndRead("set /controls/flight/aileron " + info.aileron + " \r\n");
+
+            //Console.WriteLine(aileron);
             return info;
         }
 
@@ -41,6 +42,7 @@ namespace FlightMobileApp.Controllers
             var image = System.IO.File.OpenRead("C:\\test\\random_image.jpeg");
             return File(image, "image/jpeg");
         }
+
 
     }
 }
