@@ -28,9 +28,11 @@ namespace FlightMobileApp
         {
             services.AddControllers();
             services.AddMemoryCache();
+
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -47,6 +49,17 @@ namespace FlightMobileApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            app.Use(async (context, next) =>
+            {
+                var url = context.Request.Path.Value;
+
+                if (url.Contains("screenshot"))
+                {
+                    context.Response.Redirect("http://localhost:8080/screenshot");
+                    return;
+                }
+                await next();
             });
         }
     }

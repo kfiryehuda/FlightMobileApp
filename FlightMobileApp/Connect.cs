@@ -95,19 +95,20 @@ namespace FlightMobileApp
 
                         Byte[] sendBytes = Encoding.ASCII.GetBytes(command);
                         netStream.Write(sendBytes, 0, sendBytes.Length);
-                        /* // Reads NetworkStream into a byte buffer.
-                         byte[] bytes = new byte[tcpClient.ReceiveBufferSize];
-                         // Set a 10000 millisecond = 10 sec timeout for reading.
-                         netStream.ReadTimeout = 10000;
-                         // Read can return anything from 0 to numBytesToRead. 
-                         // This method blocks until at least one byte is read.
-                         netStream.Read(bytes, 0, (int)tcpClient.ReceiveBufferSize);
+                        /*                        // Reads NetworkStream into a byte buffer.
+                                                byte[] bytes = new byte[tcpClient.ReceiveBufferSize];
+                                                // Set a 10000 millisecond = 10 sec timeout for reading.
+                                                netStream.ReadTimeout = 10000;
+                                                // Read can return anything from 0 to numBytesToRead. 
+                                                // This method blocks until at least one byte is read.
+                                                netStream.Read(bytes, 0, (int)tcpClient.ReceiveBufferSize);
 
-                         // Returns the data received from the host to the console.
-                         string returndata = Encoding.ASCII.GetString(bytes);
+                                                // Returns the data received from the host to the console.
+                                                string returndata = Encoding.ASCII.GetString(bytes);
 
-                         return returndata;*/
-                        return "fff";
+                                                return returndata;*/
+                        return "success";
+
                     }
                 }
                 catch (Exception)
