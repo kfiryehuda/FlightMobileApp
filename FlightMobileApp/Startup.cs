@@ -18,10 +18,7 @@ namespace FlightMobileApp
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            System.Diagnostics.Debug.WriteLine("kfir");
-            Connect connect = new Connect();
-            connect.ConnectToFG("127.0.0.1", 54002);
-            
+
         }
 
         public IConfiguration Configuration { get; }
@@ -30,9 +27,12 @@ namespace FlightMobileApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMemoryCache();
+
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -49,6 +49,17 @@ namespace FlightMobileApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+            app.Use(async (context, next) =>
+            {
+                var url = context.Request.Path.Value;
+
+                if (url.Contains("screenshot"))
+                {
+                    context.Response.Redirect("http://localhost:8080/screenshot");
+                    return;
+                }
+                await next();
             });
         }
     }
