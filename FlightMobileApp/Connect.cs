@@ -13,6 +13,7 @@ namespace FlightMobileApp
         TcpClient tcpClient;
         NetworkStream netStream;
         private Boolean connected = false;
+        private Boolean firstTime = true;
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="IClient" /> is connected.
         /// </summary>
@@ -80,11 +81,32 @@ namespace FlightMobileApp
         /// </summary>
         /// <param name="command">The command.</param>
         /// <returns></returns>
-        public string WriteAndRead(string command)
+        public bool WriteAndRead(string command, double value)
         {
+            if (firstTime)
+            {
+                //if flightgear not connected
+                if (netStream == null)
+                {
+                    return false;
+                }
+                try
+                {
+
+                    //set value to server
+                    Byte[] sendBytes = Encoding.ASCII.GetBytes("data\r\n");
+                    netStream.Write(sendBytes, 0, sendBytes.Length);
+
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                firstTime = false;
+            }
             if (!Connected)
             {
-                return "";
+                return false;
             }
             if (netStream.CanRead && netStream.CanWrite)
             {
@@ -92,28 +114,38 @@ namespace FlightMobileApp
                 {
                     lock (obj)
                     {
-
-                        Byte[] sendBytes = Encoding.ASCII.GetBytes(command);
+                        //set value to server
+                        Byte[] sendBytes = Encoding.ASCII.GetBytes("set " + command + " " + value + " \r\n");
                         netStream.Write(sendBytes, 0, sendBytes.Length);
-                        /*                        // Reads NetworkStream into a byte buffer.
-                                                byte[] bytes = new byte[tcpClient.ReceiveBufferSize];
-                                                // Set a 10000 millisecond = 10 sec timeout for reading.
-                                                netStream.ReadTimeout = 10000;
-                                                // Read can return anything from 0 to numBytesToRead. 
-                                                // This method blocks until at least one byte is read.
-                                                netStream.Read(bytes, 0, (int)tcpClient.ReceiveBufferSize);
+                        //get value to server
 
-                                                // Returns the data received from the host to the console.
-                                                string returndata = Encoding.ASCII.GetString(bytes);
+                        sendBytes = Encoding.ASCII.GetBytes("get " + command + " \r\n");
+                        netStream.Write(sendBytes, 0, sendBytes.Length);
+                        // Reads NetworkStream into a byte buffer.
+                        byte[] bytes = new byte[tcpClient.ReceiveBufferSize];
+                        // Set a 10000 millisecond = 10 sec timeout for reading.
+                        netStream.ReadTimeout = 10000;
+                        // Read can return anything from 0 to numBytesToRead. 
+                        // This method blocks until at least one byte is read.
+                        netStream.Read(bytes, 0, (int)tcpClient.ReceiveBufferSize);
 
-                                                return returndata;*/
-                        return "success";
+                        // Returns the data received from the host to the console.
+                        double returndata = Convert.ToDouble(Encoding.ASCII.GetString(bytes));
+
+                        if (returndata != value)
+                        {
+                            return false;
+                        }
+
+
+                        return true;
 
                     }
+
                 }
                 catch (Exception)
                 {
-                    return "";
+                    return false;
                 }
             }
             else
@@ -123,7 +155,7 @@ namespace FlightMobileApp
 
                 // Closing the tcpClient instance does not close the network stream.
                 netStream.Close();
-                return "";
+                return false;
             }
         }
 

@@ -23,7 +23,7 @@ namespace FlightMobileApp.Controllers
             _logger = logger;
             connect = new Connect();
             connect.ConnectToFG(ip, port);
-            connect.WriteAndRead("data\r\n");
+
 
         }
 
@@ -36,25 +36,18 @@ namespace FlightMobileApp.Controllers
             var aileron = "/controls/flight/aileron";
             var elevator = "/controls/flight/elevator";
             var rudder = "/controls/flight/rudder";
-            connect.WriteAndRead("set " + throttle + " " + info.throttle + " \r\n");
-            connect.WriteAndRead("set " + aileron + " " + info.aileron + " \r\n");
-            connect.WriteAndRead("set " + elevator + " " + info.elevator + " \r\n");
-            connect.WriteAndRead("set " + rudder + " " + info.rudder + " \r\n");
+            if (!(connect.WriteAndRead(throttle, info.throttle)
+                && connect.WriteAndRead(aileron, info.aileron)
+                && connect.WriteAndRead(elevator, info.elevator)
+                && connect.WriteAndRead(rudder, info.rudder)))
+            {
+                return NotFound();
+            }
+
             //Console.WriteLine(aileron);
-            return info;
+            return Ok();
         }
 
-        /* [HttpGet]
-         [Route("screenshot")]
-         public async Task<ActionResult> GetPicture()
-         {
-             *//*            string url = "http://www.google.com";
-                         RedirectResult redirectResult = new RedirectResult(url, true);
-                         return redirectResult;*//*
-
-             return Image(new { url = "http://www.example.com" });
-         }
- */
 
     }
 }
