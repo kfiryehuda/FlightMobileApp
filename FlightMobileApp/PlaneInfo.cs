@@ -4,12 +4,12 @@ namespace FlightMobileApp
 {
     public class PlaneInfo
     {
-        public int Aileron  { get; set; }
+        public double aileron { get; set; }
 
-        public int Ruddre { get; set; }
+        public double rudder { get; set; }
 
-        public int Elevator { get; set; }
+        public double elevator { get; set; }
 
-        public string Throttle { get; set; }
+        public double throttle { get; set; }
     }
 }

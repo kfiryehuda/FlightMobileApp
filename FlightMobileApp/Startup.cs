@@ -18,8 +18,7 @@ namespace FlightMobileApp
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Connect connect = new Connect();
-            connect.ConnectToFG("127.0.0.1", 54002);
+
         }
 
         public IConfiguration Configuration { get; }
@@ -28,6 +27,7 @@ namespace FlightMobileApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
