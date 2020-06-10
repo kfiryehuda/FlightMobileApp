@@ -17,14 +17,17 @@ namespace FlightMobileApp.Controllers
         private Connect connect;
         string ip = "127.0.0.1";
         int port = 5402;
-
+        private IMemoryCache cache;
         public CommandController(IMemoryCache cache, ILogger<CommandController> logger)
         {
             _logger = logger;
-            connect = new Connect();
-            connect.ConnectToFG(ip, port);
-
-
+            this.cache = cache;
+            if (!cache.TryGetValue("connect", out connect))
+            {
+                connect = new Connect();
+                cache.Set("connect", connect);
+                connect.ConnectToFG(ip, port);
+            }
         }
 
         [HttpPost]
@@ -44,7 +47,6 @@ namespace FlightMobileApp.Controllers
                 return NotFound();
             }
 
-            //Console.WriteLine(aileron);
             return Ok();
         }
 
