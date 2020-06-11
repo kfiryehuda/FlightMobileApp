@@ -56,7 +56,7 @@ namespace FlightMobileApp
 
                 if (url.Contains("screenshot"))
                 {
-                    context.Response.Redirect("http://localhost:8080/screenshot");
+                    context.Response.Redirect("http://10.0.2.2:8080/screenshot");
                     return;
                 }
                 await next();
