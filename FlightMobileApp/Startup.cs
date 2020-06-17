@@ -18,7 +18,6 @@ namespace FlightMobileApp
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
         }
 
         public IConfiguration Configuration { get; }
@@ -28,8 +27,7 @@ namespace FlightMobileApp
         {
             services.AddControllers();
             services.AddMemoryCache();
-
-
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,13 +37,9 @@ namespace FlightMobileApp
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -53,10 +47,11 @@ namespace FlightMobileApp
             app.Use(async (context, next) =>
             {
                 var url = context.Request.Path.Value;
-
                 if (url.Contains("screenshot"))
                 {
-                    context.Response.Redirect("http://10.0.2.2:8080/screenshot");
+                    string ip = Configuration.GetValue<string>("flightGearImageIP");
+                    string port = Configuration.GetValue<string>("flightGearImagePort");
+                    context.Response.Redirect("http://"+ip+":"+port+"/screenshot");
                     return;
                 }
                 await next();
