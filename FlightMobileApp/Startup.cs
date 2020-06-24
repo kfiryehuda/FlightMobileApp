@@ -44,6 +44,7 @@ namespace FlightMobileApp
             {
                 endpoints.MapControllers();
             });
+            /*
             app.Use(async (context, next) =>
             {
                 var url = context.Request.Path.Value;
@@ -56,6 +57,7 @@ namespace FlightMobileApp
                 }
                 await next();
             });
+            */
         }
     }
 }

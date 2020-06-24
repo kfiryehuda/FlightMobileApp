@@ -52,7 +52,20 @@ namespace FlightMobileApp.Controllers
 
             return Ok();
         }
-
-
+        
+        [HttpGet]
+        [Route("screenshot")]
+        public async Task<IActionResult> getProductImage()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string ip = configuration.GetValue<string>("flightGearImageIP");
+                string port = configuration.GetValue<string>("flightGearImagePort");
+                string s = "http://" + ip + ":" + port + "/screenshot";
+                HttpResponseMessage response = await client.GetAsync(s);
+                byte[] content = await response.Content.ReadAsByteArrayAsync();
+                return File(content, "image/png");
+            }
+        }
     }
 }
